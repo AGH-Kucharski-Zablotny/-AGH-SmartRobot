@@ -21,5 +21,18 @@ public class RobotManager
         robots.add(robot);
     }
 
-//    public void
+    public int findIndexOfRobotWithBiggestSignal(int antennaIndex)
+    {
+        int biggestRobotIndex = 0;
+
+        for (int i = 0; i < robots.size() - 1; i++)
+        {
+            if(robots.get(i).getSignals()[antennaIndex] > robots.get(biggestRobotIndex).getSignals()[antennaIndex])
+            {
+                biggestRobotIndex = i;
+            }
+        }
+
+        return biggestRobotIndex;
+    }
 }

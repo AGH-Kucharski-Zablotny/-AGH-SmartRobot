@@ -22,6 +22,7 @@ public class Main extends Application
 
     public static final int WIDTH = 800;
     public static final int HEIGHT = 600;
+    public static final int RADIUS = 10;
 
     private static Antenna[] antennas;
     private static RobotManager robotManager;
@@ -45,6 +46,22 @@ public class Main extends Application
         primaryStage.show();
 
         System.out.println("Done!");
+
+        // Biggest 1. antenna signal
+        int a;
+        double d;
+
+        for(int i = 0; i < 3; i++)
+        {
+            a = robotManager.findIndexOfRobotWithBiggestSignal(i);
+            d = Math.sqrt(Math.pow(robotManager.getRobots().get(a).getX() - antennas[i].getX(), 2) +
+                    Math.pow(robotManager.getRobots().get(a).getY() - antennas[i].getY(), 2));
+            System.out.println("Robot with biggest " + i + ". signal: " +
+                    "Robot at (" + robotManager.getRobots().get(a).getX() + ", " + robotManager.getRobots().get(a).getY() +
+                    ") with singals: (" + robotManager.getRobots().get(a).getSignals()[0] + ", " +
+                    robotManager.getRobots().get(a).getSignals()[1] + ", " +
+                    robotManager.getRobots().get(a).getSignals()[2] + "), distance: " + d);
+        }
     }
 
 
@@ -117,7 +134,7 @@ public class Main extends Application
                 Robot robot = new Robot(s[0], s[1], s[2], x, y);
                 robotManager.addNewRobot(robot);
                 System.out.println("Robot placed at: (" + robot.getX() + ", " + robot.getY() + ") with signals: (" +
-                        robot.getSignal1() + ", " + robot.getSignal2() + ", " + robot.getSignal3() + ")");
+                        robot.getSignals()[0] + ", " + robot.getSignals()[1] + ", " + robot.getSignals()[2] + ")");
             }
 
             // Main robot generation
@@ -136,7 +153,7 @@ public class Main extends Application
             Robot robot = new Robot(s[0], s[1], s[2], x, y);
             robotManager.addNewRobot(robot);
             System.out.println("Main robot placed at: (" + robot.getX() + ", " + robot.getY() + ") with signals: (" +
-                    robot.getSignal1() + ", " + robot.getSignal2() + ", " + robot.getSignal3() + ")");
+                    robot.getSignals()[0] + ", " + robot.getSignals()[1] + ", " + robot.getSignals()[2] + ")");
 
             System.out.println("Initialization completed, turning GUI on...");
 
@@ -159,7 +176,7 @@ public class Main extends Application
 
         for (int i = 0; i < 3; i++)
         {
-            gc.fillOval(antennas[i].getX(), antennas[i].getY(), 10, 10);
+            gc.fillOval(antennas[i].getX(), antennas[i].getY(), RADIUS, RADIUS);
         }
     }
 
@@ -170,13 +187,13 @@ public class Main extends Application
 
         for (int i = 0; i < robotManager.getRobots().size() - 1; i++)
         {
-            gc.fillOval(robotManager.getRobots().get(i).getX(), robotManager.getRobots().get(i).getY(), 10, 10);
+            gc.fillOval(robotManager.getRobots().get(i).getX(), robotManager.getRobots().get(i).getY(), RADIUS, RADIUS);
         }
 
         // Red for main robot
         gc.setFill(Color.RED);
         gc.fillOval(robotManager.getRobots().get(robotManager.getRobots().size() - 1).getX(),
-                robotManager.getRobots().get(robotManager.getRobots().size() - 1).getY(), 10, 10);
+                robotManager.getRobots().get(robotManager.getRobots().size() - 1).getY(), RADIUS, RADIUS);
     }
 
     private static boolean triangleCondition()
