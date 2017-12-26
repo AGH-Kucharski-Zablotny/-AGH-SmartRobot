@@ -45,23 +45,73 @@ public class Main extends Application
         primaryStage.setScene(new Scene(root, WIDTH, HEIGHT));
         primaryStage.show();
 
-        System.out.println("Done!");
+        System.out.println("Initialization done! \nStarting evacuation algorithm...");
 
         // Biggest 1. antenna signal
         int a;
         double d;
+        Robot[] robotsClosestToAntennas = new Robot[3];
 
+        // Find "antennas"
         for(int i = 0; i < 3; i++)
         {
             a = robotManager.findIndexOfRobotWithBiggestSignal(i);
+
             d = Math.sqrt(Math.pow(robotManager.getRobots().get(a).getX() - antennas[i].getX(), 2) +
                     Math.pow(robotManager.getRobots().get(a).getY() - antennas[i].getY(), 2));
+
+            robotsClosestToAntennas[i] = robotManager.getRobots().get(a);
+
             System.out.println("Robot with biggest " + i + ". signal: " +
                     "Robot at (" + robotManager.getRobots().get(a).getX() + ", " + robotManager.getRobots().get(a).getY() +
                     ") with singals: (" + robotManager.getRobots().get(a).getSignals()[0] + ", " +
                     robotManager.getRobots().get(a).getSignals()[1] + ", " +
                     robotManager.getRobots().get(a).getSignals()[2] + "), distance: " + d);
         }
+
+        // DEBUG: Reminder
+        for (int i = 0; i < 3; i++)
+        {
+            System.out.println("Antenna " + i + " is at coords: (" + antennas[i].getX() + ", " + antennas[i].getY() + ")");
+        }
+
+        double[] minVal = new double[3];
+        double[] maxVal = new double[3];
+
+        // Create intervals
+        for (int i = 0; i < 3; i++)
+        {
+            minVal[i] = robotsClosestToAntennas[i].getSignals()[i];
+
+            if (robotsClosestToAntennas[(i + 1) % 3].getSignals()[i] < robotsClosestToAntennas[(i + 2) % 3].getSignals()[i])
+            {
+                maxVal[i] = robotsClosestToAntennas[(i + 1) % 3].getSignals()[i];
+            }
+            else
+            {
+                maxVal[i] = robotsClosestToAntennas[(i + 2) % 3].getSignals()[i];
+            }
+
+            System.out.println("Interval for antenna " + i + ": [" + minVal[i] + ", " + maxVal[i] + "]" );
+        }
+
+        // Decide if sould evacuate
+        if(robotManager.getRobots().get(robotManager.getRobots().size() - 1).getSignals()[0] < minVal[0] &&
+                robotManager.getRobots().get(robotManager.getRobots().size() - 1).getSignals()[0] > maxVal[0] &&
+                robotManager.getRobots().get(robotManager.getRobots().size() - 1).getSignals()[1] < minVal[1] &&
+                robotManager.getRobots().get(robotManager.getRobots().size() - 1).getSignals()[1] > maxVal[1] &&
+                robotManager.getRobots().get(robotManager.getRobots().size() - 1).getSignals()[2] < minVal[2] &&
+                robotManager.getRobots().get(robotManager.getRobots().size() - 1).getSignals()[2] > maxVal[2])
+        {
+            System.out.println("Main robot should stay");
+        }
+        else
+        {
+            System.out.println("Main robot should escape");
+        }
+
+        // @TODO: MASS CENTER TO BE COMPARED TO LIMIT THE RESULT
+
     }
 
 
