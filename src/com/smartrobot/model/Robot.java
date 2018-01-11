@@ -1,8 +1,11 @@
-package sample;
+package com.smartrobot.model;
 
+/**
+ * Class defines single robot entity with its position in 2D space and signals
+ */
 public class Robot
 {
-    // RSSI(d) = A - 10n log(d)
+    // Array with signals strength
     private double[] signals;
 
     // Coords for rendering
@@ -25,6 +28,14 @@ public class Robot
         return signals;
     }
 
+    /**
+     * Constructor initializes all variables and gives them data given in parameters
+     * @param signal1 signal from antenna 1
+     * @param signal2 signal from antenna 2
+     * @param signal3 signal from antenna 3
+     * @param x x coordinate at 2D space (for rendering)
+     * @param y y coordinate at 2D space (for rendering)
+     */
     public Robot(double signal1, double signal2, double signal3, int x, int y)
     {
         signals = new double[3];
