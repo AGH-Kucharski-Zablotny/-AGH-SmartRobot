@@ -25,7 +25,7 @@ public class Tester extends Application
 
         try
         {
-            smartRobotModel.initializeModel("./src/sample/parameters.ini");
+            smartRobotModel.initializeModel("./src/com/smartrobot/model/parameters.ini");
             launch();
 
         } catch (IOException e)
