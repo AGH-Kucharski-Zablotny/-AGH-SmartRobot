@@ -2,9 +2,11 @@ package com.smartrobot.model;
 
 import com.sun.istack.internal.NotNull;
 
+import javax.rmi.ssl.SslRMIClientSocketFactory;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * Class allows to load and create antennas from file, creates dummy robots, main robot, activates "should escape"
@@ -28,6 +30,30 @@ public class SmartRobotModel
     private double A;
     private double n;
 
+    public Antenna[] getAntennas()
+    {
+        return antennas;
+    }
+
+    public RobotManager getRobotManager()
+    {
+        return robotManager;
+    }
+
+    /**
+     * Method returns array list of robots, for easier use in controller
+     * @return arraylist of robots
+     */
+    public ArrayList<Robot> getRobots()
+    {
+        return robotManager.getRobots();
+    }
+
+    public int getAmountOfDummyRobots()
+    {
+        return amountOfDummyRobots;
+    }
+
     /**
      * Constructor initializes all variables to given parameters from controller with given radius
      * @param width - width of the land field
@@ -50,6 +76,9 @@ public class SmartRobotModel
     {
         loadParametersFromFile(configFilePath);
         generateRandomAntennas();
+//        int[] x = {100, 700, 400};
+//        int[] y = {500, 500, 100};
+//        generateAntennas(x, y);
         generateDummyRobots();
         generateMainRobot();
     }
@@ -70,20 +99,50 @@ public class SmartRobotModel
         for (int i = 0; i < 3; i++)
         {
             minVal[i] = robotsClosestToAntennas[i].getSignals()[i];
-
-            if (robotsClosestToAntennas[(i + 1) % 3].getSignals()[i] < robotsClosestToAntennas[(i + 2) % 3].getSignals()[i])
-            {
-                maxVal[i] = robotsClosestToAntennas[(i + 1) % 3].getSignals()[i];
-            }
-            else
-            {
-                maxVal[i] = robotsClosestToAntennas[(i + 2) % 3].getSignals()[i];
-            }
+            maxVal[i] = Math.min(robotsClosestToAntennas[(i + 1) % 3].getSignals()[i], robotsClosestToAntennas[(i + 2) % 3].getSignals()[i]);
 
             System.out.println("Interval for antenna " + i + ": [" + minVal[i] + ", " + maxVal[i] + "]" );
         }
 
-        return makeDecision(minVal, maxVal);
+        double[] antennasIntervalMaxValue = maxVal;
+
+        // Limit intervals by the center of the sides
+        double[] sideSignal = new double[3];
+
+        for (int i = 0; i < 3; i++)
+        {
+            Robot signal = robotManager.findRobotBetweenTwoAntennas((i+1) % 3, (i+2) % 3);
+
+            System.out.println("Robot on side " + i + " is with signals: (" + signal.getX() + ", " + signal.getY() + ") with signals: (" +
+            signal.getSignals()[0] + ", " + signal.getSignals()[1] + ", " + signal.getSignals()[2] + ")");
+
+            if(signal.getSignals()[i] > maxVal[i])
+            {
+                maxVal[i] = signal.getSignals()[i];
+            }
+
+            System.out.println("New interval for antenna " + i + ": [" + minVal[i] + ", " + maxVal[i] + "]" );
+        }
+
+        // If robot is in this interval it is safe for sure:
+        if(makeDecision(minVal, maxVal))
+        {
+            System.out.println("Main robot is in safe area");
+            return true;
+        }
+
+        // Else check if robot is in ring made by circle of signal from antenna to side and from antenna to antenna
+        if(makeDecision(minVal, antennasIntervalMaxValue))
+        {
+            System.out.println("Main robot is in ring");
+            return true;
+        }
+
+        // Else we should look if it is in circle made by center of mass (because method above is very strict)
+
+        return false;
+
+        //return makeDecision(minVal, maxVal);
     }
 
     /**
@@ -94,6 +153,8 @@ public class SmartRobotModel
      */
     private boolean makeDecision(@NotNull double[] minVal, double[] maxVal)
     {
+
+
         if(robotManager.getRobots().get(robotManager.getRobots().size() - 1).getSignals()[0] < minVal[0] &&
                 robotManager.getRobots().get(robotManager.getRobots().size() - 1).getSignals()[0] > maxVal[0] &&
                 robotManager.getRobots().get(robotManager.getRobots().size() - 1).getSignals()[1] < minVal[1] &&
@@ -164,6 +225,25 @@ public class SmartRobotModel
         System.out.println("Read amount: " + amountOfDummyRobots);
 
         br.close();
+    }
+
+    /**
+     * Method generates antennas at location given by user
+     * @param x array of x coordinates of antennas
+     * @param y array of y coordinates of antennas
+     */
+    private void generateAntennas(int[] x, int[] y)
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            antennas[i] = new Antenna(x[i], y[i]);
+        }
+
+        if(!triangleCondition())
+        {
+            System.out.println("Points dont make triangle, generating random...");
+            generateRandomAntennas();
+        }
     }
 
     /**

@@ -54,5 +54,6 @@ public class Antenna
     public double calculateSignalFromAntenna(double A, double n, int robotX, int robotY)
     {
        return (A - (10 * n * Math.log(Math.sqrt(Math.pow(x - robotX, 2) + Math.pow(y - robotY, 2)))));
+//        return A * Math.sqrt(Math.pow(x - robotX, 2) + Math.pow(y - robotY, 2)) + n;
     }
 }

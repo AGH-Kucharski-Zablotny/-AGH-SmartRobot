@@ -75,6 +75,50 @@ public class RobotManager
             }
         }
 
+//        return robots.get(centerIndex);
         return centerIndex;
+    }
+
+    /**
+     * Method finds robot that is more or less between two antennas (that will mean that robot is at side of the triangle
+     * formed by antennas, at the center of the side)
+     * @param firstAntennaIndex index of the first antenna that is considered
+     * @param secondAntennaIndex index of the second antenna that is considered
+     * @return robot that is more or less in the centre of the line formed by two antennas
+     */
+    public Robot findRobotBetweenTwoAntennas(int firstAntennaIndex, int secondAntennaIndex)
+    {
+        Robot bestRobot = robots.get(0);
+
+        for (int i = 0; i < robots.size() - 1; i++)
+        {
+            if(Math.abs(robots.get(i).getSignals()[firstAntennaIndex] -
+                    robots.get(i).getSignals()[secondAntennaIndex]) < 1 &&
+                Math.abs(robots.get(i).getSignals()[firstAntennaIndex] -
+                    robots.get(i).getSignals()[secondAntennaIndex]) <
+                    Math.abs(bestRobot.getSignals()[firstAntennaIndex] - bestRobot.getSignals()[secondAntennaIndex]))
+            {
+                bestRobot = robots.get(i);
+            }
+        }
+
+        return bestRobot;
+    }
+
+    public boolean isMainRobotInRing(double[] antennaToAntennaMaxVal, double[] antennaToSideMaxVal)
+    {
+        double[] ringRadius = new double[3];
+
+        for(int i = 0; i < 3; i++)
+        {
+            ringRadius[i] = Math.abs(antennaToAntennaMaxVal[i] - antennaToSideMaxVal[i]);
+
+            if(Math.abs(robots.get(robots.size() - 1).getSignals()[i] -
+                    Math.min(antennaToAntennaMaxVal[i], antennaToSideMaxVal[i])) > ringRadius[i])
+            {
+                return false;
+            }
+        }
+        return true;
     }
 }
