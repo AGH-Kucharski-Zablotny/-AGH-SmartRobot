@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
   <children>
     <MenuBar VBox.vgrow="NEVER">
       <menus>
@@ -41,14 +41,14 @@
             <VBox layoutX="27.0" layoutY="34.0" prefHeight="304.0" prefWidth="146.0">
                <children>
                   <CheckBox mnemonicParsing="false" onAction="#checkboxAction" prefHeight="18.0" prefWidth="163.0" text="Equilateral Triangle" />
-                  <Button fx:id="startButton" mnemonicParsing="false" onAction="#startButtonAction" prefHeight="27.0" prefWidth="146.0" text="Start SmartRobot" />
+                  <Button fx:id="startButton" mnemonicParsing="false" onMousePressed="#startButtonAction" prefHeight="27.0" prefWidth="146.0" text="Start SmartRobot" />
                   <Button fx:id="decideButton" mnemonicParsing="false" onAction="#decideButtonAction" prefHeight="27.0" prefWidth="149.0" text="Decide" />
                   <Region fx:id="region" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
                   <Button fx:id="resetButton" mnemonicParsing="false" onAction="#resetButtonAction" prefHeight="27.0" prefWidth="146.0" text="Reset" />
                   <Button fx:id="quitButton" mnemonicParsing="false" onAction="#quitButtonAction" prefHeight="27.0" prefWidth="146.0" text="Quit" />
                </children>
             </VBox>
-            <Canvas height="304.0" layoutX="198.0" layoutY="34.0" width="421.0" AnchorPane.leftAnchor="198.0" />
+            <Canvas fx:id="canvas" height="304.0" layoutX="198.0" layoutY="34.0" width="421.0" AnchorPane.leftAnchor="198.0" />
          </children>
     </AnchorPane>
   </children>

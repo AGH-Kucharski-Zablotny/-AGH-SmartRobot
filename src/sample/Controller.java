@@ -156,6 +156,9 @@ public class Controller implements Initializable {
     @FXML
     void startButtonAction(MouseEvent event)
     {
+        /*
+             Zrobione już w initialize
+         */
         model = new SmartRobotModel(420, 305);
         try
         {
@@ -167,10 +170,15 @@ public class Controller implements Initializable {
         }
 
 
-        GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
-
-        Group root = new Group();
-        root.getChildren().add(canvas);
+        /*
+             Nie potrzebujesz tego tutaj inicjalizować bo już masz to zrobione w initialize, używaj po prostu
+             graphicsContext które masz jako pole w tej klasie. Tamto Group to widzę że próbowałeś jakoś naprawić ten
+             błąd, a tu się okazało że canvas w builderze nie było podlinkowane po prostu :/
+         */
+//        GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
+//
+//        Group root = new Group();
+//        root.getChildren().add(canvas);
 
         System.out.println("Canvas ON!");
     }
@@ -188,6 +196,11 @@ public class Controller implements Initializable {
 
     @FXML
     void quitButtonAction(ActionEvent event) {
+
+    }
+
+    public Controller()
+    {
 
     }
 
