@@ -72,13 +72,20 @@ public class SmartRobotModel
      * @param configFilePath file with configuration
      * @throws IOException exception is thrown when file cannot be opened or be read
      */
-    public void initializeModel(String configFilePath) throws IOException
+    public void initializeModel(String configFilePath, boolean isRandomAntennasPositions) throws IOException
     {
         loadParametersFromFile(configFilePath);
-        generateRandomAntennas();
-//        int[] x = {100, 700, 400};
-//        int[] y = {500, 500, 100};
-//        generateAntennas(x, y);
+        if(isRandomAntennasPositions)
+        {
+            generateRandomAntennas();
+        }
+        else
+        {
+            int[] x = {100, 700, 400};
+            int[] y = {500, 500, 100};
+            generateAntennas(x, y);
+        }
+
         generateDummyRobots();
         generateMainRobot();
     }
