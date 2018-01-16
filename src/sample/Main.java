@@ -25,6 +25,7 @@ public class Main extends Application
         primaryStage.setTitle("SmartRobot");
         primaryStage.setScene(new Scene(root, 640, 400));
         primaryStage.show();
+        primaryStage.setResizable(false);
     }
 
 
