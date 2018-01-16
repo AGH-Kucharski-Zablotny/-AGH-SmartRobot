@@ -144,27 +144,38 @@ public class Controller implements Initializable {
     @FXML
     void decideButtonAction(ActionEvent event)
     {
-        if(model.shouldMainRobotStay(isAlgorithmStrict))
+        if(model.getAntennas()[0] != null)
         {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Decide Alert");
-            alert.setHeaderText("Robot should stay or not?");
-            alert.setContentText("Main Robot should stay!");
-            //alert.setContentText("I have a great message for you!" + '\n' + "Buy PREMIUM version!");
-            alert.showAndWait();
+            if(model.shouldMainRobotStay(isAlgorithmStrict))
+            {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Decide Alert");
+                alert.setHeaderText("Robot should stay or not?");
+                alert.setContentText("Main Robot should stay!");
+                //alert.setContentText("I have a great message for you!" + '\n' + "Buy PREMIUM version!");
+                alert.showAndWait();
 
-            System.out.println("Main Robot should stay!");
+                System.out.println("Main Robot should stay!");
+            }
+            else
+            {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Decide Alert");
+                alert.setHeaderText("Robot should stay or not?");
+                alert.setContentText("Main Robot should fly away!");
+                //alert.setContentText("I have a great message for you!" + '\n' + "Buy PREMIUM version!");
+                alert.showAndWait();
+
+                System.out.println("Main Robot should fly away!");
+            }
         }
         else
         {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Decide Alert");
-            alert.setHeaderText("Robot should stay or not?");
-            alert.setContentText("Main Robot should fly away!");
-            //alert.setContentText("I have a great message for you!" + '\n' + "Buy PREMIUM version!");
+            alert.setHeaderText("No model found");
+            alert.setContentText("You should start model first, then decide.");
             alert.showAndWait();
-
-            System.out.println("Main Robot should fly away!");
         }
     }
 
