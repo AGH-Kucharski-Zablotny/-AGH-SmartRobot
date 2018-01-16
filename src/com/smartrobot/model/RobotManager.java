@@ -52,33 +52,6 @@ public class RobotManager
         return biggestRobotIndex;
     }
 
-    // @TODO Should we even consider this?
-    public int findMassCenterOfAntennasIndex()
-    {
-        int centerIndex = 0;
-
-        for (int i = 0; i < robots.size() - 1; i++)
-        {
-            if (Math.abs(robots.get(i).getSignals()[0] - robots.get(i).getSignals()[1]) < 5 &&
-                    Math.abs(robots.get(i).getSignals()[0] - robots.get(i).getSignals()[2]) < 5 &&
-                    Math.abs(robots.get(i).getSignals()[1] - robots.get(i).getSignals()[2]) < 5)
-            {
-                if ((Math.abs(robots.get(i).getSignals()[0] - robots.get(i).getSignals()[1]) <
-                                Math.abs(robots.get(centerIndex).getSignals()[0] - robots.get(centerIndex).getSignals()[1]) &&
-                        Math.abs(robots.get(i).getSignals()[0] - robots.get(i).getSignals()[2]) <
-                                Math.abs(robots.get(centerIndex).getSignals()[0] - robots.get(centerIndex).getSignals()[2]) &&
-                        Math.abs(robots.get(i).getSignals()[1] - robots.get(i).getSignals()[2]) <
-                                Math.abs(robots.get(centerIndex).getSignals()[1] - robots.get(centerIndex).getSignals()[2])))
-                {
-                    centerIndex = i;
-                }
-            }
-        }
-
-//        return robots.get(centerIndex);
-        return centerIndex;
-    }
-
     /**
      * Method finds robot that is more or less between two antennas (that will mean that robot is at side of the triangle
      * formed by antennas, at the center of the side)
@@ -105,20 +78,4 @@ public class RobotManager
         return bestRobot;
     }
 
-    public boolean isMainRobotInRing(double[] antennaToAntennaMaxVal, double[] antennaToSideMaxVal)
-    {
-        double[] ringRadius = new double[3];
-
-        for(int i = 0; i < 3; i++)
-        {
-            ringRadius[i] = Math.abs(antennaToAntennaMaxVal[i] - antennaToSideMaxVal[i]);
-
-            if(Math.abs(robots.get(robots.size() - 1).getSignals()[i] -
-                    Math.min(antennaToAntennaMaxVal[i], antennaToSideMaxVal[i])) > ringRadius[i])
-            {
-                return false;
-            }
-        }
-        return true;
-    }
 }

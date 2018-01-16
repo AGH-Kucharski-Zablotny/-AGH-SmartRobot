@@ -2,7 +2,6 @@ package com.smartrobot.model;
 
 import com.sun.istack.internal.NotNull;
 
-import javax.rmi.ssl.SslRMIClientSocketFactory;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;

@@ -5,7 +5,6 @@ package sample;
         import javafx.event.ActionEvent;
         import javafx.fxml.FXML;
         import javafx.fxml.Initializable;
-        import javafx.scene.Group;
         import javafx.scene.canvas.Canvas;
         import javafx.scene.canvas.GraphicsContext;
         import javafx.scene.control.Alert;
@@ -19,8 +18,6 @@ package sample;
         import java.net.URL;
         import java.util.ResourceBundle;
 
-        import static java.awt.image.ImageObserver.HEIGHT;
-        import static java.awt.image.ImageObserver.WIDTH;
         import static javafx.application.Application.launch;
 
 /**
@@ -57,7 +54,7 @@ public class Controller implements Initializable {
     /**
      * Booleans control behaviour of algorithm (make more strict or for testing purpose)
      */
-    private boolean check = false;
+    private boolean shouldSameSideTriangle = false;
     private boolean isAlgorithmStrict = false;
 
     /**
@@ -74,7 +71,7 @@ public class Controller implements Initializable {
         }
 
 
-        graphicsContext.setFill(Color.YELLOW);
+        graphicsContext.setFill(Color.RED);
         graphicsContext.fillOval(model.getRobotManager().getRobots().get(model.getRobotManager().getRobots().size() - 1).getX(), model.getRobotManager().getRobots().get(model.getRobotManager().getRobots().size() - 1).getY(), 5, 5);
     }
 
@@ -84,7 +81,7 @@ public class Controller implements Initializable {
      */
     private void drawAntennas(GraphicsContext graphicsContext)
     {
-        graphicsContext.setFill(Color.WHITE);
+        graphicsContext.setFill(Color.BLUE);
 
         for (int i = 0; i < 3; i++)
         {
@@ -99,7 +96,7 @@ public class Controller implements Initializable {
     @FXML
     void checkboxAction(ActionEvent event)
     {
-        check = !check;
+        shouldSameSideTriangle = !shouldSameSideTriangle;
         System.out.println("CheckBox matched!");
     }
 
@@ -121,10 +118,10 @@ public class Controller implements Initializable {
     @FXML
     void startButtonAction(MouseEvent event)
     {
-        model = new SmartRobotModel(420, 305);
+        model = new SmartRobotModel((int)canvas.getWidth(), (int)canvas.getHeight());
         try
         {
-            model.initializeModel("./src/com/smartrobot/model/parameters.ini", !check);
+            model.initializeModel("./src/com/smartrobot/model/parameters.ini", !shouldSameSideTriangle);
         }
         catch (IOException e)
         {
@@ -186,7 +183,7 @@ public class Controller implements Initializable {
     @FXML
     void testButtonAction(ActionEvent event)
     {
-        model = new SmartRobotModel(420, 305);
+        model = new SmartRobotModel((int)canvas.getWidth(), (int)canvas.getHeight());
         try
         {
             model.initializeModelTest("./src/com/smartrobot/model/parameters.ini", false);
